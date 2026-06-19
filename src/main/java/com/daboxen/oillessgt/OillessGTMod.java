@@ -1,5 +1,6 @@
 package com.daboxen.oillessgt;
 
+import com.daboxen.oillessgt.additions.ProgressionPatches;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -91,7 +92,7 @@ public class OillessGTMod {
      * @param event
      */
     private void addMaterials(MaterialEvent event) {
-        // CustomMaterials.init();
+        ProgressionPatches.registerMaterials();
     }
 
     /**
