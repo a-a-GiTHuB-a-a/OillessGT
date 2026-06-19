@@ -159,7 +159,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
-// See com.example.examplemod.mixin.DummyMixin for information about mixins
+// See com.daboxen.oillessgt.mixin.FluidVeinMixin for information about mixins
 mixin {
     add sourceSets.main, "mixins.${mod_id}.refmap.json"
     config "${mod_id}.mixins.json"
