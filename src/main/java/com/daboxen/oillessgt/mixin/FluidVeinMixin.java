@@ -1,11 +1,13 @@
 package com.daboxen.oillessgt.mixin;
 
+import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidDefinition;
 import com.gregtechceu.gtceu.common.data.GTBedrockFluids;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.function.Consumer;
 
 // This is a dummy mixin! It doesn't actually do anything.
 // Mixins are ways to modify code in other classes.
@@ -20,10 +22,9 @@ public class FluidVeinMixin {
      * Injects into the fluid vein registrar to prevent registering the oil ones >:D
      */
     @Inject(method = "create", at = @At("HEAD"), cancellable = true)
-    public void ignoreOilVeins(Args args, CallbackInfo ci) {
+    private static void ignoreOilVeins(ResourceLocation id, Consumer<BedrockFluidDefinition.Builder> consumer, CallbackInfoReturnable<BedrockFluidDefinition> ci) {
         //ResourceLocation id,
         //Consumer<BedrockFluidDefinition.Builder> consumer
-        ResourceLocation id = args.get(0);
         if (id.toString().contains("oil") || id.toString().contains("natural_gas")) ci.cancel();
     }
 }
