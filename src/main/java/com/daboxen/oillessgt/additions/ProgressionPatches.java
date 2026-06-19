@@ -23,12 +23,11 @@ public class ProgressionPatches {
     }
 
     public static void addRecipes(Consumer<FinishedRecipe> provider) {
-        CHEMICAL_RECIPES.recipeBuilder("acetaldehyde_synthesis")
-                .notConsumable(dust, Copper, 1)
+        ELECTROLYZER_RECIPES.recipeBuilder("ethanol_electrolysis")
                 .inputFluids(Ethanol, 1000)
                 .outputFluids(Acetaldehyde.getFluid(1000))
                 .outputFluids(Hydrogen.getFluid(2000))
-                .duration(100).EUt(VA[EV]).save(provider);
+                .duration(600).EUt(VA[MV]).save(provider);
         CHEMICAL_RECIPES.recipeBuilder("butadiene_synthesis")
                 .notConsumable(dust, Tantalum, 1)
                 .inputFluids(Ethanol, 1000)
