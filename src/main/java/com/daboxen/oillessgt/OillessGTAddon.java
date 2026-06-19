@@ -1,5 +1,6 @@
-package com.example.examplemod;
+package com.daboxen.oillessgt;
 
+import com.daboxen.oillessgt.additions.ProgressionPatches;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
@@ -10,11 +11,11 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 @GTAddon
-public class ExampleGTAddon implements IGTAddon {
+public class OillessGTAddon implements IGTAddon {
 
     @Override
     public GTRegistrate getRegistrate() {
-        return ExampleMod.EXAMPLE_REGISTRATE;
+        return OillessGTMod.OILLESS_REGISTRATE;
     }
 
     @Override
@@ -22,7 +23,7 @@ public class ExampleGTAddon implements IGTAddon {
 
     @Override
     public String addonModId() {
-        return ExampleMod.MOD_ID;
+        return OillessGTMod.MOD_ID;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class ExampleGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
-        // CustomRecipes.init(provider);
+        ProgressionPatches.addRecipes(provider);
     }
 
     @Override
