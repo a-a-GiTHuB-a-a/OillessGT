@@ -1,5 +1,6 @@
 package com.daboxen.oillessgt.mixin;
 
+import com.daboxen.oillessgt.OillessGTMod;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidDefinition;
 import com.gregtechceu.gtceu.common.data.GTBedrockFluids;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,9 @@ public class FluidVeinMixin {
     private static void ignoreOilVeins(ResourceLocation id, Consumer<BedrockFluidDefinition.Builder> consumer, CallbackInfoReturnable<BedrockFluidDefinition> ci) {
         //ResourceLocation id,
         //Consumer<BedrockFluidDefinition.Builder> consumer
-        if (id.toString().contains("oil") || id.toString().contains("natural_gas")) ci.cancel();
+        if (id.toString().contains("oil") || id.toString().contains("natural_gas")) {
+            OillessGTMod.LOGGER.info("Bad vein found %s; preventing registration".formatted(id.toString()));
+            ci.cancel();
+        }
     }
 }
