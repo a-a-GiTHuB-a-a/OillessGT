@@ -23,7 +23,7 @@ public class FluidVeinMixin {
      * Injects into the fluid vein registrar to prevent registering the oil ones >:D
      */
     @Inject(method = "create", at = @At("HEAD"), cancellable = true)
-    private static void ignoreOilVeins(ResourceLocation id, Consumer<BedrockFluidDefinition.Builder> consumer, CallbackInfoReturnable<BedrockFluidDefinition> ci) {
+    private static void oillessGT$ignoreOilVeins(ResourceLocation id, Consumer<BedrockFluidDefinition.Builder> consumer, CallbackInfoReturnable<BedrockFluidDefinition> ci) {
         //ResourceLocation id,
         //Consumer<BedrockFluidDefinition.Builder> consumer
         if (id.toString().contains("oil") || id.toString().contains("natural_gas")) {

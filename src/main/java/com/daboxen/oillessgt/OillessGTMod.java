@@ -101,7 +101,7 @@ public class OillessGTMod {
      * @param event
      */
     private void modifyMaterials(PostMaterialEvent event) {
-        // CustomMaterials.modify();
+        ProgressionPatches.loadOilItems();
     }
 
     /**
