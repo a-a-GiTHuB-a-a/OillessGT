@@ -14,6 +14,7 @@ public class ProgressionPatches {
     public static Material Acetaldehyde;
 
     public static void registerMaterials() {
+        OillessGTMod.LOGGER.info("Adding custom materials");
         Acetaldehyde = new Material.Builder(OillessGTMod.id("acetaldehyde"))
                 .gas()
                 .color(0xbf7f5f)
@@ -23,6 +24,7 @@ public class ProgressionPatches {
     }
 
     public static void addRecipes(Consumer<FinishedRecipe> provider) {
+        OillessGTMod.LOGGER.info("Adding custom recipes");
         ELECTROLYZER_RECIPES.recipeBuilder("ethanol_electrolysis")
                 .inputFluids(Ethanol, 1000)
                 .outputFluids(Acetaldehyde.getFluid(1000))
