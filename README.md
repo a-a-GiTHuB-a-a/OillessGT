@@ -15,6 +15,9 @@ However, most things necessary for progression already have oil-free alternative
 * Propene (for epoxy and PVB) can be made by electrolyzing acetone…twice.
 * Benzene and other derivative aromatics like phenol (for SBR) all come from coal/wood tar!
 * Naphthalene also comes from coal tar.
-* *Butadiene…is actually unobtainable without oil in base GT. I had to add a recipe to make it :(
+* *Butadiene…is actually unobtainable without oil in base GT. I had to add a recipe to make it :( but the recipe is cool!
 ## …why?
 I hate oilproc! Simple as that. Also, I thought it would be cool to have a no-oil-processing challenge run.
+## Credits
+* the fine folk at the GTCEu Discord (notably @pheonixvine) for helping me out
+* the TFG repository for its recipe "removal" system
