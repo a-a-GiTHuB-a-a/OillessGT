@@ -41,6 +41,11 @@ public class OillessGTAddon implements IGTAddon {
         // CustomElements.init();
     }
 
+    @Override
+    public void registerFluidVeins() {
+        ProgressionPatches.removeOilVeins();
+    }
+
     // If you have custom ingredient types, uncomment this & change to match your capability.
     // KubeJS WILL REMOVE YOUR RECIPES IF THESE ARE NOT REGISTERED.
     /*

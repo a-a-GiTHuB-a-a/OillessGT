@@ -3,6 +3,7 @@ package com.daboxen.oillessgt.additions;
 import com.daboxen.oillessgt.OillessGTMod;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.DISABLE_DECOMPOSITION;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
+import static com.gregtechceu.gtceu.api.registry.GTRegistries.BEDROCK_FLUID_DEFINITIONS;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
@@ -45,12 +47,14 @@ public class ProgressionPatches {
                 .duration(200).EUt(VA[HV]).save(provider);
     }
 
-    public static final Set<String> OIL_FLUIDS = new HashSet<>();
+    public static Set<String> OIL_FLUIDS = new HashSet<>();
     public static final String[] CRACKING_TYPES = {"hydro_cracked", "steam_cracked"};
     public static final String[] CRACKING_DEGREES = {"lightly", "severely"};
     public static final String[] CRACKABLE_HYDROCARBONS = {"ethane", "ethylene", "propene", "propane", "butane", "butene", "butadiene"}; //in the same order GT does them—which is to say, _disappointingly_ close to an actual order
 
     public static void loadOilItems() {
+        OillessGTMod.LOGGER.info("Listing the fluids to erase from memory…");
+
         //things called oil
         OIL_FLUIDS.add("gtceu:oil");
         OIL_FLUIDS.add("gtceu:heavy_oil");
@@ -72,6 +76,7 @@ public class ProgressionPatches {
         OIL_FLUIDS.add("gtceu:naphtha");
         OIL_FLUIDS.add("gtceu:refinery_gas");
 
+        //cracked things
         for (String type : CRACKING_TYPES) {
             for (String degree : CRACKING_DEGREES) {
                 OIL_FLUIDS.add("gtceu:%s_%s_light_fuel".formatted(degree, type));
@@ -80,9 +85,17 @@ public class ProgressionPatches {
                 OIL_FLUIDS.add("gtceu:%s_%s_gas".formatted(degree, type));
             }
             for (String hydrocarbon : CRACKABLE_HYDROCARBONS) {
-                OIL_FLUIDS.add("gtceu:%s_%s".formatted(CRACKING_TYPES, CRACKABLE_HYDROCARBONS));
+                OIL_FLUIDS.add("gtceu:%s_%s".formatted(type, hydrocarbon));
             }
         }
+    }
+
+    public static void removeOilVeins() {
+        BEDROCK_FLUID_DEFINITIONS.remove(GTCEu.id("heavy_oil_deposit"));
+        BEDROCK_FLUID_DEFINITIONS.remove(GTCEu.id("light_oil_deposit"));
+        BEDROCK_FLUID_DEFINITIONS.remove(GTCEu.id("oil_deposit"));
+        BEDROCK_FLUID_DEFINITIONS.remove(GTCEu.id("natural_gas_deposit"));
+        BEDROCK_FLUID_DEFINITIONS.remove(GTCEu.id("nether_natural_gas_deposit"));
     }
 
     public static boolean shouldDeleteFromJSON(ResourceLocation id, JsonElement json) {
@@ -94,7 +107,6 @@ public class ProgressionPatches {
             if (result.isJsonPrimitive()) resStr = result.getAsString();
             else if (result.isJsonObject() && result.getAsJsonObject().has("item"))
                 resStr = result.getAsJsonObject().get("item").getAsString();
-
             if (OIL_FLUIDS.contains(resStr)) return true;
         }
         String rawJSON = obj.toString();
