@@ -45,30 +45,44 @@ public class ProgressionPatches {
                 .duration(200).EUt(VA[HV]).save(provider);
     }
 
-    public static final Set<String> OIL_ITEMS = new HashSet<>();
+    public static final Set<String> OIL_FLUIDS = new HashSet<>();
     public static final String[] CRACKING_TYPES = {"hydro_cracked", "steam_cracked"};
+    public static final String[] CRACKING_DEGREES = {"lightly", "severely"};
+    public static final String[] CRACKABLE_HYDROCARBONS = {"ethane", "ethylene", "propene", "propane", "butane", "butene", "butadiene"}; //in the same order GT does them—which is to say, _disappointingly_ close to an actual order
 
     public static void loadOilItems() {
         //things called oil
-        OIL_ITEMS.add("gtceu:oil");
-        OIL_ITEMS.add("gtceu:heavy_oil");
-        OIL_ITEMS.add("gtceu:light_oil");
-        OIL_ITEMS.add("gtceu:raw_oil");
+        OIL_FLUIDS.add("gtceu:oil");
+        OIL_FLUIDS.add("gtceu:heavy_oil");
+        OIL_FLUIDS.add("gtceu:light_oil");
+        OIL_FLUIDS.add("gtceu:raw_oil");
 
         //things that are basically oil
-        OIL_ITEMS.add("gtceu:natural_gas");
+        OIL_FLUIDS.add("gtceu:natural_gas");
 
         //direct oil products
-        OIL_ITEMS.add("gtceu:sulfuric_light_fuel");
-        OIL_ITEMS.add("gtceu:sulfuric_heavy_fuel");
-        OIL_ITEMS.add("gtceu:sulfuric_naphtha");
-        OIL_ITEMS.add("gtceu:sulfuric_gas");
+        OIL_FLUIDS.add("gtceu:sulfuric_light_fuel");
+        OIL_FLUIDS.add("gtceu:sulfuric_heavy_fuel");
+        OIL_FLUIDS.add("gtceu:sulfuric_naphtha");
+        OIL_FLUIDS.add("gtceu:sulfuric_gas");
 
         //desulfurized oil products
-        OIL_ITEMS.add("gtceu:light_fuel");
-        OIL_ITEMS.add("gtceu:heavy_fuel");
-        OIL_ITEMS.add("gtceu:naphtha");
-        OIL_ITEMS.add("gtceu:refinery_gas");
+        OIL_FLUIDS.add("gtceu:light_fuel");
+        OIL_FLUIDS.add("gtceu:heavy_fuel");
+        OIL_FLUIDS.add("gtceu:naphtha");
+        OIL_FLUIDS.add("gtceu:refinery_gas");
+
+        for (String type : CRACKING_TYPES) {
+            for (String degree : CRACKING_DEGREES) {
+                OIL_FLUIDS.add("gtceu:%s_%s_light_fuel".formatted(degree, type));
+                OIL_FLUIDS.add("gtceu:%s_%s_heavy_fuel".formatted(degree, type));
+                OIL_FLUIDS.add("gtceu:%s_%s_naphtha".formatted(degree, type));
+                OIL_FLUIDS.add("gtceu:%s_%s_gas".formatted(degree, type));
+            }
+            for (String hydrocarbon : CRACKABLE_HYDROCARBONS) {
+                OIL_FLUIDS.add("gtceu:%s_%s".formatted(CRACKING_TYPES, CRACKABLE_HYDROCARBONS));
+            }
+        }
     }
 
     public static boolean shouldDeleteFromJSON(ResourceLocation id, JsonElement json) {
@@ -81,16 +95,13 @@ public class ProgressionPatches {
             else if (result.isJsonObject() && result.getAsJsonObject().has("item"))
                 resStr = result.getAsJsonObject().get("item").getAsString();
 
-            if (OIL_ITEMS.contains(resStr)) return true;
+            if (OIL_FLUIDS.contains(resStr)) return true;
         }
         String rawJSON = obj.toString();
-        for (String inputItem : OIL_ITEMS) {
+        for (String inputItem : OIL_FLUIDS) {
             if (rawJSON.contains("\"item\":\"" + inputItem + "\"") ||
                     rawJSON.contains("\"item\": \"" + inputItem + "\""))
                 return true;
-        }
-        for (String crackingType : CRACKING_TYPES) {
-            if (rawJSON.contains(crackingType)) return true;
         }
         return false;
     }
