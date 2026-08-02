@@ -1,11 +1,13 @@
 package com.daboxen.oillessgt;
 
 import com.daboxen.oillessgt.additions.ProgressionPatches;
+
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
 
@@ -34,6 +36,11 @@ public class OillessGTAddon implements IGTAddon {
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         ProgressionPatches.addRecipes(provider);
+    }
+
+    @Override
+    public void removeRecipes(Consumer<ResourceLocation> provider) {
+        ProgressionPatches.removeRecipes(provider);
     }
 
     @Override

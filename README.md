@@ -2,6 +2,7 @@
 This is an addon meant to make the GT experience just a bit harder by removing all oil from the game!
 ## What does this entail?
 * no more oil or direct oil products (the _chemicals_ made from oil will stay…for now…)
+* no more cracking! for oil _or_ hydrocarbons
 ## Okay, but how is this playable?
 Quite a few nice-to-haves are inaccessible without oil.
 * Gasoline (and therefore HOG)

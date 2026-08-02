@@ -1,6 +1,8 @@
 package com.daboxen.oillessgt;
 
 import com.daboxen.oillessgt.additions.ProgressionPatches;
+import com.daboxen.oillessgt.data.OillessDatagen;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -23,6 +25,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.gregtechceu.gtceu.api.registry.GTRegistries.RECIPE_TYPES;
+
 @Mod(OillessGTMod.MOD_ID)
 @SuppressWarnings("removal")
 public class OillessGTMod {
@@ -32,6 +36,8 @@ public class OillessGTMod {
     public static GTRegistrate OILLESS_REGISTRATE = GTRegistrate.create(OillessGTMod.MOD_ID);
 
     public OillessGTMod() {
+        OillessDatagen.init();
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
@@ -101,7 +107,7 @@ public class OillessGTMod {
      * @param event
      */
     private void modifyMaterials(PostMaterialEvent event) {
-        ProgressionPatches.loadOilItems();
+        ProgressionPatches.modifyMaterials();
     }
 
     /**
@@ -111,6 +117,11 @@ public class OillessGTMod {
      * @param event
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
+        for (GTRecipeType recipeType : RECIPE_TYPES) {
+            recipeType.onRecipeBuild((builder, provider) -> {
+
+            });
+        }
         // CustomRecipeTypes.init();
     }
 
