@@ -13,12 +13,12 @@ public class RecipeBuilderHelper {
 
     public static List<FluidIngredient> getInputFluids(GTRecipeBuilder builder) {
         return builder.input.getOrDefault(FluidRecipeCapability.CAP, Collections.emptyList()).stream()
-                .map((content) -> FluidRecipeCapability.CAP.of(content.getContent())).toList();
+                .map((content) -> FluidRecipeCapability.CAP.of(content.content())).toList();
     }
 
     public static List<FluidIngredient> getOutputFluids(GTRecipeBuilder builder) {
         return builder.output.getOrDefault(FluidRecipeCapability.CAP, Collections.emptyList()).stream()
-                .map((content) -> FluidRecipeCapability.CAP.of(content.getContent())).toList();
+                .map((content) -> FluidRecipeCapability.CAP.of(content.content())).toList();
     }
 
     public static FluidStack stringToFluidStack(String id) {

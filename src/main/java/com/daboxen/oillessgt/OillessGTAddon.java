@@ -29,11 +29,6 @@ public class OillessGTAddon implements IGTAddon {
     }
 
     @Override
-    public void registerTagPrefixes() {
-        // CustomTagPrefixes.init();
-    }
-
-    @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         ProgressionPatches.addRecipes(provider);
     }
@@ -41,11 +36,6 @@ public class OillessGTAddon implements IGTAddon {
     @Override
     public void removeRecipes(Consumer<ResourceLocation> provider) {
         ProgressionPatches.removeRecipes(provider);
-    }
-
-    @Override
-    public void registerElements() {
-        // CustomElements.init();
     }
 
     @Override

@@ -1,11 +1,12 @@
 package com.daboxen.oillessgt;
 
 import com.daboxen.oillessgt.additions.ProgressionPatches;
+import com.daboxen.oillessgt.config.OillessConfiguration;
 import com.daboxen.oillessgt.data.OillessDatagen;
 
+import com.daboxen.oillessgt.machines.OillessMachines;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
-import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -43,7 +44,8 @@ public class OillessGTMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
-        modEventBus.addListener(this::addMaterialRegistries);
+        OillessConfiguration.init();
+
         modEventBus.addListener(this::addMaterials);
         modEventBus.addListener(this::modifyMaterials);
 
@@ -55,8 +57,6 @@ public class OillessGTMod {
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
-
-        OILLESS_REGISTRATE.registerRegistrate();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -78,17 +78,6 @@ public class OillessGTMod {
      */
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
-    }
-
-    /**
-     * Create a material manager for your mod using GT's API.
-     * You MUST have this if you have custom materials.
-     * Remember to register them not to GT's namespace, but your own.
-     * 
-     * @param event
-     */
-    private void addMaterialRegistries(MaterialRegistryEvent event) {
-        GTCEuAPI.materialManager.createRegistry(OillessGTMod.MOD_ID);
     }
 
     /**
@@ -132,7 +121,7 @@ public class OillessGTMod {
      * @param event
      */
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        // CustomMachines.init();
+        OillessMachines.init(event);
     }
 
     /**

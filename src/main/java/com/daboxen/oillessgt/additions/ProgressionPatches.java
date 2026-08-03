@@ -64,21 +64,21 @@ public class ProgressionPatches {
 
         CENTRIFUGE_RECIPES.recipeBuilder("soul_sand_separation_oilless").duration(200).EUt(80)
                 .inputItems(Blocks.SOUL_SAND.asItem())
-                .chancedOutput(new ItemStack(Blocks.SAND), 9250, 0)
-                .chancedOutput(dust, Saltpeter, 2250, 0)
-                .chancedOutput(dust, Coal, 225, 0)
+                .chancedOutput(new ItemStack(Blocks.SAND), 9250)
+                .chancedOutput(dust, Saltpeter, 2250)
+                .chancedOutput(dust, Coal, 225)
                 .outputFluids(CoalTar.getFluid(80))
                 .save(provider);
 
         CENTRIFUGE_RECIPES.recipeBuilder("oilsands_ore_separation_oilless")
                 .inputItems(ore, Oilsands)
-                .chancedOutput(new ItemStack(Blocks.SAND), 7500, 0)
+                .chancedOutput(new ItemStack(Blocks.SAND), 7500)
                 .outputFluids(CoalTar.getFluid(2000))
                 .duration(200).EUt(30).save(provider);
 
         CENTRIFUGE_RECIPES.recipeBuilder("oilsands_dust_separation_oilless")
                 .inputItems(dust, Oilsands)
-                .chancedOutput(new ItemStack(Blocks.SAND), 7500, 0)
+                .chancedOutput(new ItemStack(Blocks.SAND), 7500)
                 .outputFluids(CoalTar.getFluid(2000))
                 .duration(200).EUt(30).save(provider);
     }

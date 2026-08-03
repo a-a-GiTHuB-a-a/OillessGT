@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
         mavenCentral()
     }
     dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath "org.spongepowered:mixingradle:0.7-SNAPSHOT"
     }
 }
 
@@ -12,28 +12,32 @@ plugins {
     id "idea"
     id "eclipse"
     id "maven-publish"
-    id 'net.neoforged.moddev.legacyforge' version '2.0.91'
-    id 'com.diffplug.spotless' version '7.0.2'
+    id "net.neoforged.moddev.legacyforge" version "2.0.91"
+    id "com.diffplug.spotless" version "7.0.2"
 }
 
 sourceSets {
     main.resources {
-        srcDir 'src/generated/resources'
+        srcDir "src/generated/resources"
     }
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        name = 'GTCEu Maven'
-        url = 'https://maven.gtceu.com'
-        content {
-            includeGroup 'com.gregtechceu.gtceu'
+    exclusiveContent {
+        forRepository { maven {
+            name = "GTCEu Maven"
+            url = "https://maven.gtceu.com"
+
+        } }
+        filter {
+            includeGroup "com.gregtechceu.gtceu"
+            includeGroup "brachy.modularui"
         }
     }
     maven {
-        name 'FirstDarkDev'
+        name "FirstDarkDev"
         url "https://maven.firstdark.dev/snapshots/"
     }
     maven { // Registrate
@@ -51,22 +55,27 @@ repositories {
     maven {
         url = "https://maven.theillusivec4.top/"
     }
-    maven {
-        // Curse Forge File
-        url "https://cursemaven.com/"
-        content {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Cursemaven"
+                url = "https://cursemaven.com"
+            }
+        }
+        filter {
             includeGroup "curse.maven"
         }
     }
-    maven {
-        // EMI
-		name = "TerraformersMC"
-		url = "https://maven.terraformersmc.com/"
-	}
+    exclusiveContent { //yoinked this from gt lol
+        forRepository { maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/releases/"
+        } }
+        filter { includeGroup("dev.emi") }
+    }
     maven {
         url = "https://thedarkcolour.github.io/KotlinForForge/"
     }
-
 }
 
 version = mod_version
@@ -75,7 +84,7 @@ base { archivesName = archives_base_name }
 java { sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17 }
 
 legacyForge {
-    version = project.minecraft_version + '-' + project.forge_version
+    version = project.minecraft_version + "-" + project.forge_version
 
     parchment {
         mappingsVersion = project.mapping_version
@@ -89,7 +98,7 @@ legacyForge {
             // "SCAN": For mods scan.
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
-            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty "forge.logging.markers", "REGISTRIES"
 
             // Recommended logging level for the console
             // You can set various levels here.
@@ -99,21 +108,21 @@ legacyForge {
         client {
             client()
             sourceSet = sourceSets.main
-            programArguments.addAll('--refresh-dependencies')
-            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            programArguments.addAll("--refresh-dependencies")
+            systemProperty("forge.enabledGameTestNamespaces", project.mod_id)
         }
         server {
             server()
             sourceSet = sourceSets.main
-            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
-            programArguments.addAll('--nogui', '--world', 'world-extra')
+            systemProperty("forge.enabledGameTestNamespaces", project.mod_id)
+            programArguments.addAll("--nogui", "--world", "world-extra")
         }
         data {
             data()
             sourceSet = sourceSets.main
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll('--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
-            programArguments.addAll('--existing-mod', 'gtceu')
+            programArguments.addAll("--mod", project.mod_id, "--all", "--output", file("src/generated/resources/").getAbsolutePath(), "--existing", file("src/main/resources/").getAbsolutePath())
+            programArguments.addAll("--existing-mod", "gtceu")
         }
     }
 
@@ -150,13 +159,14 @@ dependencies {
 
     // GregTech and dependencies
     modImplementation("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtceu_version}:slim") { transitive = false }
-    modImplementation("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
+    modImplementation("brachy.modularui:modularui-mc${minecraft_version}:${mui_version}") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
-    modImplementation("dev.toma.configuration:configuration-forge-${minecraft_version}:${configuration_version}")
+    //modImplementation("dev.toma.configuration:configuration-forge-${minecraft_version}:${configuration_version}")
+    modImplementation("curse.maven:configuration-444699:${configuration_id}")
 
     // lombok
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly "org.projectlombok:lombok:1.18.24"
+    annotationProcessor "org.projectlombok:lombok:1.18.24"
 }
 
 // See com.daboxen.oillessgt.mixin.FluidVeinMixin for information about mixins
@@ -184,7 +194,7 @@ tasks.named('processResources', ProcessResources).configure {
     }
 }
 
-tasks.named('jar', Jar).configure { finalizedBy 'reobfJar' }
+tasks.named("jar", Jar).configure { finalizedBy "reobfJar" }
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
