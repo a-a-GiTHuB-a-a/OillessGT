@@ -10,9 +10,13 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -37,22 +41,66 @@ public class OillessMachines {
         if (OillessConfiguration.INSTANCE.addLargePyrolyser) {
             LARGE_PYROLYSER = OILLESS_REGISTRATE
                     .multiblock("large_pyrolyser", CoilWorkableElectricMultiblockMachine::new)
-                    .rotationState(RotationState.NONE)
-                    //.recipeType(GTRecipeTypes.PYROLYSE_RECIPES)
+                    .langValue("Trunk-Ravaging Energized Extractor")
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .recipeType(PYROLYSE_RECIPES)
                     .recipeModifiers(GTRecipeModifiers::pyrolyseOvenOverclock, BATCH_MODE, GTRecipeModifiers::hatchParallel)
-                    .appearanceBlock(MACHINE_CASING_ULV)
+                    .appearanceBlock(CASING_HIGH_TEMPERATURE_SMELTING)
+                    .partAppearance((controller, part, side) -> {
+                        int NEAR_BOUGHS = 10; //number chosen somewhat arbitrarily—should work
+                        if ((part.getBlockPos().getY() - controller.getBlockPos().getY()) > NEAR_BOUGHS) {
+                            return CASING_VIBRATION_SAFE.getDefaultState();
+                        }
+                        return CASING_HIGH_TEMPERATURE_SMELTING.getDefaultState();
+                    })
                     .pattern(definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
-                            .slice("               ", "               ", "               ", "               ", "    TTTTTTT    ", "    TTTTTTT    ", "    TTTTTTT    ", "    TTTSTTT    ", "    TTTTTTT    ", "    TTTTTTT    ", "    TTTTTTT    ", "               ", "               ", "               ", "               ")
-                            .slice("               ", "               ", "               ", "               ", "    TTTTTTT    ", "    T#####T    ", "    T#####T    ", "    T#####T    ", "    T#####T    ", "    T#####T    ", "    TTTTTTT    ", "               ", "               ", "               ", "               ")
+                            .slice("       T       ", "       T       ", "      TTT      ", "     TTTTT     ", "    TTTTTTT    ", "   TTTTTTTTT   ", "  TTTTTTTTTTT  ", "TTTTTTTETTTTTTT", "  TTTTTTTTTTT  ", "   TTTTTTTTT   ", "    TTTTTTT    ", "     TTTTT     ", "      TTT      ", "       T       ", "       T       ")
+                            .slice("               ", "               ", "               ", "      TTT      ", "    TITTTIT    ", "    ICCCCCI    ", "   TTC#P#CTT   ", "   TTCP#PCTT   ", "   TTC#P#CTT   ", "    ICCCCCI    ", "    TITTTIT    ", "      TTT      ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TIIIIIT    ", "    ICCCCCI    ", "    IC#P#CI    ", "    ICP#PCI    ", "    IC#P#CI    ", "    ICCCCCI    ", "    TIISIIT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "               ", "    TTTTTTT    ", "    TGGGGGT    ", "    TGP#PGT    ", "    TG###GT    ", "    TGP#PGT    ", "    TGGGGGT    ", "    TTTTTTT    ", "               ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "    TTT TTT    ", "   TTPTTTPTT   ", "   TPPGGGPPT   ", "   TTGGGGGTT   ", "    TGGGGGT    ", "   TTGGGGGTT   ", "   TPPGGGPPT   ", "   TTPTTTPTT   ", "    TTT TTT    ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "               ", "    TPT TPT    ", "  TTTT   TTTT  ", "  TPTT   TTPT  ", "  TT       TT  ", "               ", "  TT       TT  ", "  TPTT   TTPT  ", "  TTTT   TTTT  ", "    TPT TPT    ", "               ", "               ", "               ")
+                            .slice("               ", "   TTT   TTT   ", "   TPT   TPT   ", " TTTTT   TTTTT ", " TPTT     TTPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPTT     TTPT ", " TTTTT   TTTTT ", "   TPT   TPT   ", "   TTT   TTT   ", "               ")
+                            .slice("               ", "   TTT   TTT   ", "   TPT   TPT   ", " TTTTT   TTTTT ", " TPT       TPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPT       TPT ", " TTTTT   TTTTT ", "   TPT   TPT   ", "   TTT   TTT   ", "               ")
+                            .slice("               ", "   TTT   TTT   ", "   TPT   TPT   ", " TTTTT   TTTTT ", " TPT       TPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPT       TPT ", " TTTTT   TTTTT ", "   TPT   TPT   ", "   TTT   TTT   ", "               ")
+                            .slice("               ", "   TTT   TTT   ", "  TTPT   TPTT  ", " TTTTT   TTTTT ", " TPTT     TTPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPTT     TTPT ", " TTTTT   TTTTT ", "  TTPT   TPTT  ", "   TTT   TTT   ", "               ")
+                            .slice("  LLLLL LLLLL  ", " LLLLLL LLLLLL ", "LLLLPLL LLPLLLL", "LLLLLLL LLLLLLL", "LLPLLLL LLLLPLL", "LLLLLL   LLLLLL", "LLLLL     LLLLL", "               ", "LLLLL     LLLLL", "LLLLLL   LLLLLL", "LLPLLLL LLLLPLL", "LLLLLLL LLLLLLL", "LLLLPLL LLPLLLL", " LLLLLL LLLLLL ", "  LLLLL LLLLL  ")
+                            .slice("  LLLLLLLLLLL  ", " LLLLLLLLLLLLL ", "LLLLPLLLLLPLLLL", "LLLLLLLLLLLLLLL", "LLPLLLLLLLLLPLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLPLLLLLLLLLPLL", "LLLLLLLLLLLLLLL", "LLLLPLLLLLPLLLL", " LLLLLLLLLLLLL ", "  LLLLLLLLLLL  ")
+                            .slice("  LLLLLLLLLLL  ", " LLLLLLLLLLLLL ", "LLLLPLLLLLPLLLL", "LLLLLLLLLLLLLLL", "LLPLLLLLLLLLPLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLPLLLLLLLLLPLL", "LLLLLLLLLLLLLLL", "LLLLPLLLLLPLLLL", " LLLLLLLLLLLLL ", "  LLLLLLLLLLL  ")
+                            .slice("  LLLLLLLLLLL  ", " LLLLLLLLLLLLL ", "LLLLPLLLLLPLLLL", "LLLLLLLLLLLLLLL", "LLPLLLLLLLLLPLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLLLLLLLLLLLLLL", "LLPLLLLLLLLLPLL", "LLLLLLLLLLLLLLL", "LLLLPLLLLLPLLLL", " LLLLLLLLLLLLL ", "  LLLLLLLLLLL  ")
+                            .slice("  LLLLL LLLLL  ", " LLLLLL LLLLLL ", "LLLLPLL LLPLLLL", "LLLLLLL LLLLLLL", "LLPLLLL LLLLPLL", "LLLLLL   LLLLLL", "LLLLL     LLLLL", "               ", "LLLLL     LLLLL", "LLLLLL   LLLLLL", "LLPLLLL LLLLPLL", "LLLLLLL LLLLLLL", "LLLLPLL LLPLLLL", " LLLLLL LLLLLL ", "  LLLLL LLLLL  ")
+                            .slice("               ", "   LLL   LLL   ", "  LLOL   LOLL  ", " LLLLL   LLLLL ", " LOLL     LLOL ", " LLL       LLL ", "               ", "               ", "               ", " LLL       LLL ", " LOLL     LLOL ", " LLLLL   LLLLL ", "  LLOL   LOLL  ", "   LLL   LLL   ", "               ")
+                            .where('E', Predicates.abilities(INPUT_ENERGY))
                             .where('S', Predicates.controller(blocks(definition.get())))
+                            .where('I', Predicates.blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()).or(
+                                    Predicates.abilities(IMPORT_ITEMS)).or(Predicates.autoAbilities(true, false, true)))
+                            .where('L', Predicates.blocks(CASING_VIBRATION_SAFE.get()))
+                            .where('O', Predicates.blocks(CASING_VIBRATION_SAFE.get()).or(Predicates.abilities(IMPORT_FLUIDS_1X, EXPORT_ITEMS, EXPORT_FLUIDS)))
                             .where('T', Predicates.blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
+                            .where('P', Predicates.blocks(CASING_TUNGSTENSTEEL_PIPE.get()))
+                            .where('G', Predicates.blocks(CASING_TEMPERED_GLASS.get()))
                             .where('C', Predicates.heatingCoils())
+                            //.where('?', Predicates.blocks(CASING_COKE_BRICKS.get())) //for testing purposes ONLY. none of this structure uses coke oven bricks
                             .where('#', Predicates.air())
                             .where(' ', Predicates.any())
                             .build())
                     .allowFlip(false)
-                    .workableCasingModel(GTCEu.id("block/casings/voltage/ulv/side"),
-                            GTCEu.id("block/multiblock/pyrolyse_oven"))
+                    .workableCasingModel(GTCEu.id("block/casings/gcym/high_temperature_smelting_casing"),
+                            GTCEu.id("block/multiblock/gcym/mega_blast_furnace"))
                     .tooltips(Component.translatable("gtceu.machine.pyrolyse_oven.tooltip.1"))
                     .additionalDisplay((controller, syncManager) -> {
                         if (!(controller instanceof CoilWorkableElectricMultiblockMachine coilMachine))
@@ -60,7 +108,7 @@ public class OillessMachines {
                         BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
                                 () -> new BooleanSyncValue(controller::isFormed));
                         IntSyncValue coilTier = syncManager.getOrCreateSyncHandler("coilTier", IntSyncValue.class,
-                                () -> new IntSyncValue(() -> coilMachine.getCoilTier()));
+                                () -> new IntSyncValue(coilMachine::getCoilTier));
 
                         return Collections.singletonList(Text
                                 .dynamic(() -> Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
