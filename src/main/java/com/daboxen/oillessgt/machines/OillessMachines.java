@@ -11,6 +11,8 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
+
+import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -73,7 +75,7 @@ public class OillessMachines {
                             .slice("               ", "               ", "               ", "               ", "    TGGGGGT    ", "    GCCCCCG    ", "    GC#P#CG    ", "    GCP#PCG    ", "    GC#P#CG    ", "    GCCCCCG    ", "    TGGGGGT    ", "               ", "               ", "               ", "               ")
                             .slice("               ", "               ", "               ", "               ", "    TTTTTTT    ", "    TGGGGGT    ", "    TGP#PGT    ", "    TG###GT    ", "    TGP#PGT    ", "    TGGGGGT    ", "    TTTTTTT    ", "               ", "               ", "               ", "               ")
                             .slice("               ", "               ", "               ", "    TTT TTT    ", "   TTPTTTPTT   ", "   TPPGGGPPT   ", "   TTGGGGGTT   ", "    TGGGGGT    ", "   TTGGGGGTT   ", "   TPPGGGPPT   ", "   TTPTTTPTT   ", "    TTT TTT    ", "               ", "               ", "               ")
-                            .slice("               ", "               ", "               ", "    TPT TPT    ", "  TTTT   TTTT  ", "  TPTT   TTPT  ", "  TT       TT  ", "               ", "  TT       TT  ", "  TPTT   TTPT  ", "  TTTT   TTTT  ", "    TPT TPT    ", "               ", "               ", "               ")
+                            .slice("               ", "               ", "    TTT TTT    ", "    TPT TPT    ", "  TTTT   TTTT  ", "  TPTT   TTPT  ", "  TT       TT  ", "               ", "  TT       TT  ", "  TPTT   TTPT  ", "  TTTT   TTTT  ", "    TPT TPT    ", "    TTT TTT    ", "               ", "               ")
                             .slice("               ", "   TTT   TTT   ", "   TPT   TPT   ", " TTTTT   TTTTT ", " TPTT     TTPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPTT     TTPT ", " TTTTT   TTTTT ", "   TPT   TPT   ", "   TTT   TTT   ", "               ")
                             .slice("               ", "   TTT   TTT   ", "   TPT   TPT   ", " TTTTT   TTTTT ", " TPT       TPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPT       TPT ", " TTTTT   TTTTT ", "   TPT   TPT   ", "   TTT   TTT   ", "               ")
                             .slice("               ", "   TTT   TTT   ", "   TPT   TPT   ", " TTTTT   TTTTT ", " TPT       TPT ", " TTT       TTT ", "               ", "               ", "               ", " TTT       TTT ", " TPT       TPT ", " TTTTT   TTTTT ", "   TPT   TPT   ", "   TTT   TTT   ", "               ")
@@ -97,6 +99,14 @@ public class OillessMachines {
                             //.where('?', Predicates.blocks(CASING_COKE_BRICKS.get())) //for testing purposes ONLY. none of this structure uses coke oven bricks
                             .where('#', Predicates.air())
                             .where(' ', Predicates.any())
+                            .build())
+                    .pattern("charcoal_liquefier", definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
+                            .slice(" HHHHH ", "H#####H", "H#####H", "H#####H", "H#####H", "H#####H", " HHHHH ")
+                            .where('H', Predicates.blocks(CASING_WATERTIGHT.get()))
+                            .where('#', Predicates.air())
+                            .where(' ', Predicates.any())
+                            .startOffset(OriginOffset.of(0, 17, 0))
+                            .anchorOffset(OriginOffset.of(-3, 0, -3))
                             .build())
                     .allowFlip(false)
                     .workableCasingModel(GTCEu.id("block/casings/gcym/high_temperature_smelting_casing"),
