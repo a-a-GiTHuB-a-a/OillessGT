@@ -1,30 +1,40 @@
 package com.daboxen.oillessgt.machines;
 
 import brachy.modularui.api.drawable.Text;
+import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.value.sync.BooleanSyncValue;
+import brachy.modularui.value.sync.GenericSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
+import com.daboxen.oillessgt.api.RecipeBuilderHelper;
 import com.daboxen.oillessgt.config.OillessConfiguration;
+import com.daboxen.oillessgt.machines.multiblock.LargePyrolyserMachine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
-import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
 
 import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.content.SerializerFluidIngredient;
+import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
+import com.gregtechceu.gtceu.api.sync_system.data_transformers.ValueTransformers;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
+import com.gregtechceu.gtceu.common.mui.GTByteBufAdapters;
+import com.tterrag.registrate.providers.RegistrateLangProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import static com.daboxen.oillessgt.OillessGTMod.LOGGER;
+import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
 import static com.daboxen.oillessgt.OillessGTMod.OILLESS_REGISTRATE;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
@@ -34,19 +44,18 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.*;
 
 public class OillessMachines {
 
-
     public static MultiblockMachineDefinition LARGE_PYROLYSER;
 
     public static void init(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        LOGGER.info("Registering machines…");
+        OILLESS_LOGGER.info("Registering machines…");
 
         if (OillessConfiguration.INSTANCE.addLargePyrolyser) {
             LARGE_PYROLYSER = OILLESS_REGISTRATE
-                    .multiblock("large_pyrolyser", CoilWorkableElectricMultiblockMachine::new)
+                    .multiblock("large_pyrolyser", LargePyrolyserMachine::new)
                     .langValue("Trunk-Ravaging Energized Extractor")
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(PYROLYSE_RECIPES)
-                    .recipeModifiers(GTRecipeModifiers::pyrolyseOvenOverclock, BATCH_MODE, GTRecipeModifiers::hatchParallel)
+                    .recipeModifiers(LargePyrolyserMachine::recipeModifier, GTRecipeModifiers::hatchParallel, GTRecipeModifiers::pyrolyseOvenOverclock, BATCH_MODE)
                     .appearanceBlock(CASING_HIGH_TEMPERATURE_SMELTING)
                     .partAppearance((controller, part, side) -> {
                         int NEAR_BOUGHS = 10; //number chosen somewhat arbitrarily—should work
@@ -113,19 +122,38 @@ public class OillessMachines {
                             GTCEu.id("block/multiblock/gcym/mega_blast_furnace"))
                     .tooltips(Component.translatable("gtceu.machine.pyrolyse_oven.tooltip.1"))
                     .additionalDisplay((controller, syncManager) -> {
-                        if (!(controller instanceof CoilWorkableElectricMultiblockMachine coilMachine))
+                        if (!(controller instanceof LargePyrolyserMachine pyrolyserMachine))
                             return Collections.emptyList();
                         BooleanSyncValue isFormed = syncManager.getOrCreateSyncHandler("isFormed", BooleanSyncValue.class,
                                 () -> new BooleanSyncValue(controller::isFormed));
                         IntSyncValue coilTier = syncManager.getOrCreateSyncHandler("coilTier", IntSyncValue.class,
-                                () -> new IntSyncValue(coilMachine::getCoilTier));
+                                () -> new IntSyncValue(pyrolyserMachine::getCoilTier));
+                        GenericSyncValue<FluidStack> ingredient = syncManager.getOrCreateSyncHandler(
+                                "currentFluidBoostType",
+                                GenericSyncValue.class,
+                                () -> GenericSyncValue.builder(FluidStack.class)
+                                        .getter(pyrolyserMachine::getCurrentFluidBoostType)
+                                        .adapter(GTByteBufAdapters.makeAdapter(FluidStack.CODEC))
+                                        .build()
+                        );
 
-                        return Collections.singletonList(Text
-                                .dynamic(() -> Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
+                        List<IWidget> display = new ArrayList<>();
+
+                        display.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
                                         coilTier.getIntValue() == 0 ? 75 : 50 * (coilTier.getIntValue() + 1)))
                                 .asWidget().setEnabledIf(w -> isFormed.getBoolValue()));
+                        if (!ingredient.getValue().equals(FluidStack.EMPTY)) {
+                            display.add(Text.dynamic(() -> Component.translatable("oillessgt.multiblock.large_pyrolyse_oven.fluid_boost",
+                                    ingredient.getValue().getAmount(), ingredient.getValue().getDisplayName())).asWidget());
+                        }
+
+                        return display;
                     })
                     .register();
         }
+    }
+
+    public static void initLang(RegistrateLangProvider provider) {
+        provider.add("oillessgt.multiblock.large_pyrolyse_oven.fluid_boost", "Currently consuming %d mB/t of %s");
     }
 }

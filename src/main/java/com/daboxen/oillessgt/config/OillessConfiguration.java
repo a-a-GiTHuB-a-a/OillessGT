@@ -19,7 +19,7 @@ public class OillessConfiguration {
     public static void init() {
         synchronized (LOCK) {
             if (INSTANCE == null || INTERNAL_INSTANCE == null) {
-                INTERNAL_INSTANCE = Configuration.registerConfig(OillessConfiguration.class, ConfigFormats.yaml());
+                INTERNAL_INSTANCE = Configuration.registerConfig(OillessConfiguration.class, ConfigFormats.YAML);
                 INSTANCE = INTERNAL_INSTANCE.getConfigInstance();
             }
         }

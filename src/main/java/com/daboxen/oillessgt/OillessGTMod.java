@@ -33,7 +33,7 @@ import static com.gregtechceu.gtceu.api.registry.GTRegistries.RECIPE_TYPES;
 public class OillessGTMod {
 
     public static final String MOD_ID = "oillessgt";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger OILLESS_LOGGER = LogManager.getLogger();
     public static GTRegistrate OILLESS_REGISTRATE = GTRegistrate.create(OillessGTMod.MOD_ID);
 
     public OillessGTMod() {
@@ -61,13 +61,13 @@ public class OillessGTMod {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            LOGGER.info("Hello from common setup! This is *after* registries are done, so we can do this:");
-            LOGGER.info("Look, I found a {}!", Items.DIAMOND);
+            OILLESS_LOGGER.info("Hello from common setup! This is *after* registries are done, so we can do this:");
+            OILLESS_LOGGER.info("Look, I found a {}!", Items.DIAMOND);
         });
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        LOGGER.info("Hey, we're on Minecraft version {}!", Minecraft.getInstance().getLaunchedVersion());
+        OILLESS_LOGGER.info("Hey, we're on Minecraft version {}!", Minecraft.getInstance().getLaunchedVersion());
     }
 
     /**

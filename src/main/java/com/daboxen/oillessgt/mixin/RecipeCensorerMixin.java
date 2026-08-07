@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Consumer;
 
-import static com.daboxen.oillessgt.OillessGTMod.LOGGER;
-
 @Mixin(value = GTRecipeBuilder.class, remap = false)
 public class RecipeCensorerMixin {
 

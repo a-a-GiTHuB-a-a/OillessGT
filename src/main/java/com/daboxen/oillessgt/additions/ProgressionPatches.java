@@ -5,26 +5,21 @@ import com.daboxen.oillessgt.api.RecipeBuilderHelper;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
-import com.mojang.serialization.JsonOps;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.daboxen.oillessgt.OillessGTMod.LOGGER;
+import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.DISABLE_DECOMPOSITION;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
@@ -38,7 +33,7 @@ public class ProgressionPatches {
     public static Material Acetaldehyde;
 
     public static void registerMaterials() {
-        LOGGER.info("Adding custom materials");
+        OILLESS_LOGGER.info("Adding custom materials");
         Acetaldehyde = new Material.Builder(OillessGTMod.id("acetaldehyde"))
                 .gas()
                 .color(0xbf7f5f)
@@ -48,7 +43,7 @@ public class ProgressionPatches {
     }
 
     public static void addRecipes(Consumer<FinishedRecipe> provider) {
-        LOGGER.info("Adding custom recipes");
+        OILLESS_LOGGER.info("Adding custom recipes");
         ELECTROLYZER_RECIPES.recipeBuilder("ethanol_electrolysis")
                 .inputFluids(Ethanol, 1000)
                 .outputFluids(Acetaldehyde.getFluid(1000))
@@ -98,7 +93,6 @@ public class ProgressionPatches {
             }
             // check outputs
             for (var fluidIngredient : RecipeBuilderHelper.getOutputFluids(recipe)) {
-                if (fluidIngredient.test(OilHeavy.getFluid(1000))) LOGGER.info("HEAVY OIL AT {}", recipe.id);
                 if (fluidIngredient.test(stack)) return true;
             }
         }
@@ -113,7 +107,7 @@ public class ProgressionPatches {
             "butene", "butadiene" };
 
     private static void loadOilItems() {
-        LOGGER.info("Listing the fluids to erase from memory…");
+        OILLESS_LOGGER.info("Listing the fluids to erase from memory…");
         if (!OIL_FLUIDS.isEmpty()) return;
 
         // things called oil
