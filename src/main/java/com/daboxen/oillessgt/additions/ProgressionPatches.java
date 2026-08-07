@@ -3,6 +3,7 @@ package com.daboxen.oillessgt.additions;
 import com.daboxen.oillessgt.OillessGTMod;
 import com.daboxen.oillessgt.api.RecipeBuilderHelper;
 
+import com.daboxen.oillessgt.recipe.OillessRecipes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
@@ -43,18 +44,9 @@ public class ProgressionPatches {
 
     public static void addRecipes(Consumer<FinishedRecipe> provider) {
         OILLESS_LOGGER.info("Adding custom recipes");
-        ELECTROLYZER_RECIPES.recipeBuilder("ethanol_electrolysis")
-                .inputFluids(Ethanol, 1000)
-                .outputFluids(Acetaldehyde.getFluid(1000))
-                .outputFluids(Hydrogen.getFluid(2000))
-                .duration(600).EUt(VA[MV]).save(provider);
-        CHEMICAL_RECIPES.recipeBuilder("butadiene_synthesis")
-                .notConsumable(dust, Tantalum, 1)
-                .inputFluids(Ethanol, 1000)
-                .inputFluids(Acetaldehyde, 1000)
-                .outputFluids(Butadiene.getFluid(1000))
-                .outputFluids(Water.getFluid(2000))
-                .duration(200).EUt(VA[HV]).save(provider);
+
+        OillessRecipes.addButadieneSynthesisRecipes(provider);
+        OillessRecipes.addLargePyrolyserRecipes(provider);
 
         CENTRIFUGE_RECIPES.recipeBuilder("soul_sand_separation_oilless").duration(200).EUt(80)
                 .inputItems(Blocks.SOUL_SAND.asItem())

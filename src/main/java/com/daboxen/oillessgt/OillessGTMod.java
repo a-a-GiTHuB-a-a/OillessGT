@@ -5,6 +5,7 @@ import com.daboxen.oillessgt.config.OillessConfiguration;
 import com.daboxen.oillessgt.data.OillessDatagen;
 import com.daboxen.oillessgt.machines.OillessMachines;
 
+import com.daboxen.oillessgt.recipe.OillessRecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
@@ -106,12 +107,7 @@ public class OillessGTMod {
      * @param event
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
-        for (GTRecipeType recipeType : RECIPE_TYPES) {
-            recipeType.onRecipeBuild((builder, provider) -> {
-
-            });
-        }
-        // CustomRecipeTypes.init();
+        OillessRecipeTypes.init();
     }
 
     /**
