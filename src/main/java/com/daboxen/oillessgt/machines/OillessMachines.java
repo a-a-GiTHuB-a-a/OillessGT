@@ -104,7 +104,8 @@ public class OillessMachines {
                             .where('L', Predicates.blocks(CASING_VIBRATION_SAFE.get()))
                             .where('O',
                                     Predicates.blocks(CASING_VIBRATION_SAFE.get())
-                                            .or(Predicates.abilities(IMPORT_FLUIDS_1X, EXPORT_ITEMS, EXPORT_FLUIDS)))
+                                            .or(Predicates.abilities(IMPORT_FLUIDS_1X, EXPORT_ITEMS, EXPORT_FLUIDS))
+                                            .or(Predicates.abilities(MUFFLER).setExactLimit(1)))
                             .where('T', Predicates.blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
                             .where('P', Predicates.blocks(CASING_TUNGSTENSTEEL_PIPE.get()))
                             .where('G', Predicates.blocks(CASING_TEMPERED_GLASS.get()))
