@@ -7,16 +7,20 @@ import com.daboxen.oillessgt.machines.multiblock.LargePyrolyserMachine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.common.data.GTMaterialItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.mui.GTByteBufAdapters;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
 
 import brachy.modularui.api.drawable.Text;
@@ -123,6 +127,9 @@ public class OillessMachines {
                             .startOffset(OriginOffset.of(0, 17, 0))
                             .anchorOffset(OriginOffset.of(-3, 0, -3))
                             .build())
+                    .recoveryItems(
+                            () -> new ItemLike[] {
+                                    GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dust, GTMaterials.Ash).get() })
                     .allowFlip(false)
                     .workableCasingModel(GTCEu.id("block/casings/gcym/high_temperature_smelting_casing"),
                             GTCEu.id("block/multiblock/gcym/mega_blast_furnace"))
