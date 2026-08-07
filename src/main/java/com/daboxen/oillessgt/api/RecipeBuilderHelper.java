@@ -3,15 +3,12 @@ package com.daboxen.oillessgt.api;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
 
 public class RecipeBuilderHelper {
 

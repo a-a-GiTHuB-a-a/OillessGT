@@ -1,8 +1,8 @@
 package com.daboxen.oillessgt.data;
 
 import com.daboxen.oillessgt.additions.ProgressionPatches;
-
 import com.daboxen.oillessgt.machines.OillessMachines;
+
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
 import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;

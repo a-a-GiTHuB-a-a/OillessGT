@@ -5,7 +5,6 @@ import com.daboxen.oillessgt.api.RecipeBuilderHelper;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -139,7 +138,7 @@ public class ProgressionPatches {
                 OIL_FLUIDS.add("gtceu:%s_%s_naphtha".formatted(degree, type));
                 OIL_FLUIDS.add("gtceu:%s_%s_gas".formatted(degree, type));
             }
-            //do i really wanna disable these? idk
+            // do i really wanna disable these? idk
             for (String hydrocarbon : CRACKABLE_HYDROCARBONS) {
                 OIL_FLUIDS.add("gtceu:%s_%s".formatted(type, hydrocarbon));
             }

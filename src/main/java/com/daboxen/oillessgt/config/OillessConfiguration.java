@@ -1,6 +1,7 @@
 package com.daboxen.oillessgt.config;
 
 import com.daboxen.oillessgt.OillessGTMod;
+
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.Config;
 import dev.toma.configuration.config.Configurable;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @Config(id = OillessGTMod.MOD_ID)
 public class OillessConfiguration {
+
     public static OillessConfiguration INSTANCE;
     private static final Object LOCK = new Object();
 
@@ -31,7 +33,7 @@ public class OillessConfiguration {
     }
 
     @Configurable
-    @Configurable.Comment({"Whether to register the TREE.", "Default: true"})
+    @Configurable.Comment({ "Whether to register the TREE.", "Default: true" })
     @Configurable.UpdateRestriction(UpdateRestrictions.MAIN_MENU)
     public boolean addLargePyrolyser = true;
 }

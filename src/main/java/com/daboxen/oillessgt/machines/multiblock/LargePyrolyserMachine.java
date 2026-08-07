@@ -13,9 +13,11 @@ import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import com.mojang.datafixers.util.Pair;
 import lombok.Getter;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -93,6 +95,7 @@ public class LargePyrolyserMachine extends CoilWorkableElectricMultiblockMachine
             return RecipeModifier.nullWrongType(LargePyrolyserMachine.class, machine);
         }
 
-        return pyrolyserMachine.currentInertGasModifier; //TODO: maybe implement batching/parallels/stuff in here instead of slapping them on top?
+        return pyrolyserMachine.currentInertGasModifier; // TODO: maybe implement batching/parallels/stuff in here
+                                                         // instead of slapping them on top?
     }
 }
