@@ -1,7 +1,6 @@
 package com.daboxen.oillessgt.machines;
 
 import com.daboxen.oillessgt.config.OillessConfiguration;
-import com.daboxen.oillessgt.machines.multiblock.InertGasBoostEMICategory;
 import com.daboxen.oillessgt.machines.multiblock.LargePyrolyserMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -43,7 +42,6 @@ import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*; //keep this!!!
 
 public class OillessMachines {
 
@@ -173,7 +171,5 @@ public class OillessMachines {
         provider.add("oillessgt.multiblock.large_pyrolyse_oven.fluid_boost", "Currently consuming %d mB/t of %s");
         provider.add("oillessgt.multiblock.large_pyrolyse_oven.low_gas_tier", "Current inert gas tier too low.");
         provider.add("oillessgt.recipe.inert_gas_boost.minimum", "Minimum Inert Gas Type: %s");
-        provider.add("oillessgt.large_pyrolyser", "Large Pyrolyser");
-        InertGasBoostEMICategory.initLang(provider);
     }
 }

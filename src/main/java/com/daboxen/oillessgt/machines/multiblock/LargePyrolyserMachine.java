@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
+import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
+
 public class LargePyrolyserMachine extends CoilWorkableElectricMultiblockMachine {
 
     public static final Int2ObjectMap<Pair<FluidIngredient, ModifierFunction>> inertGases = new Int2ObjectAVLTreeMap<>(Collections.reverseOrder());
@@ -89,6 +91,7 @@ public class LargePyrolyserMachine extends CoilWorkableElectricMultiblockMachine
                     RecipeHelper.handleRecipeIO(this, consumptionRecipe, IO.IN, this.recipeLogic.getChanceCaches())
                             .isSuccess();
             if (recipeWorked) {
+                OILLESS_LOGGER.info("ID: {}, Ingredient: {}", gasID, ingredient.values[0].getFluids());
                 setFluidBoostType(ingredient.getStacks()[0]);
                 currentGasTier = gasID;
                 currentInertGasModifier = function;

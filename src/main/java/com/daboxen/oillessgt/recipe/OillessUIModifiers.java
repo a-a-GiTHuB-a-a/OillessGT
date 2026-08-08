@@ -12,7 +12,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.chat.Component;
 
 public class OillessUIModifiers {
-    public static final RecipeUIModifier INERT_GAS_INFO = (recipe, widget) -> {
+    public static final RecipeUIModifier INERT_GAS_REQUIREMENT_INFO = (recipe, widget) -> {
         if (recipe.data.contains("minimum_gas_tier")) {
             int minimumGasTier = recipe.data.getInt("minimum_gas_tier");
             FluidIngredient requiredGasBoost = FluidIngredient.EMPTY;

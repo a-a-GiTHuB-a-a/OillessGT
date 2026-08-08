@@ -45,8 +45,9 @@ public class ProgressionPatches {
     public static void addRecipes(Consumer<FinishedRecipe> provider) {
         OILLESS_LOGGER.info("Adding custom recipes");
 
-        OillessRecipes.addButadieneSynthesisRecipes(provider);
+        OillessRecipes.addInertGasBoostRecipes(provider);
         OillessRecipes.addLargePyrolyserRecipes(provider);
+        OillessRecipes.addButadieneSynthesisRecipes(provider);
 
         CENTRIFUGE_RECIPES.recipeBuilder("soul_sand_separation_oilless").duration(200).EUt(80)
                 .inputItems(Blocks.SOUL_SAND.asItem())
