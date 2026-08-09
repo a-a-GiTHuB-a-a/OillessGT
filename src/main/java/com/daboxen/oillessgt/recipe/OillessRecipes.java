@@ -31,8 +31,9 @@ public class OillessRecipes {
                     .perTick(true)
                     .inputFluids(fluidPerTick)
                     .hideDuration(true)
-                    .addData("eutMultiplier", String.valueOf(ModifierHelper.getEutMultiplier(effect)))
-                    .addData("durationMultiplier", String.valueOf(ModifierHelper.getDurationMultiplier(effect)))
+                    .addData("gas_tier", tier)
+                    .addData("eut_multiplier", String.valueOf(ModifierHelper.getEutMultiplier(effect)))
+                    .addData("duration_multiplier", String.valueOf(ModifierHelper.getDurationMultiplier(effect)))
                     .save(provider);
         }
     }
@@ -42,14 +43,14 @@ public class OillessRecipes {
                 .inputItems(dust, Carbon)
                 .addData("minimum_gas_tier", 1)
                 .outputItems(dust, ActivatedCarbon)
-                .duration(320).EUt(64)
+                .duration(640).EUt(40)
                 .save(provider);
 
         LARGE_PYROLYSE_RECIPES.recipeBuilder("activated_carbon_from_charcoal").circuitMeta(1)
                 .inputItems(dust, Charcoal)
                 .addData("minimum_gas_tier", 1)
                 .outputItems(dust, ActivatedCarbon)
-                .duration(640).EUt(64)
+                .duration(1280).EUt(40)
                 .save(provider);
 
         // Charcoal Byproducts
@@ -58,7 +59,7 @@ public class OillessRecipes {
                 .addData("minimum_gas_tier", 1)
                 .outputItems(Items.CHARCOAL, 20)
                 .outputFluids(CharcoalByproducts.getFluid(4000))
-                .duration(320).EUt(96)
+                .duration(640).EUt(64)
                 .save(provider);
 
         // Wood Tar

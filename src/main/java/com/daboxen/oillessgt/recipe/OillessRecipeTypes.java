@@ -27,8 +27,12 @@ public class OillessRecipeTypes {
     public static final GTRecipeType INERT_GAS_BOOST_RECIPES = register("inert_gas_boost", GTRecipeTypes.DUMMY).setMaxIOSize(0, 0, 1, 0)
             .setEUIO(IO.NONE)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .addRecipeUIModifier((recipe, widget) -> widget.textComponents.child(Text.of(Component.translatable("oillessgt.recipe.eut_multiplier", recipe.data.getString("eutMultiplier"))).asWidget()))
-                    .addRecipeUIModifier((recipe, widget) -> widget.textComponents.child(Text.of(Component.translatable("oillessgt.recipe.duration_multiplier", recipe.data.getString("durationMultiplier"))).asWidget())))
+                    .addRecipeUIModifier((recipe, widget) -> widget
+                            .textComponents.child(Text.of(Component.translatable("oillessgt.recipe.inert_gas_boost.tier", recipe.data.getInt("gas_tier"))).asWidget()))
+                    .addRecipeUIModifier((recipe, widget) -> widget
+                            .textComponents.child(Text.of(Component.translatable("oillessgt.recipe.inert_gas_boost.eut_multiplier", recipe.data.getString("eut_multiplier"))).asWidget()))
+                    .addRecipeUIModifier((recipe, widget) -> widget
+                            .textComponents.child(Text.of(Component.translatable("oillessgt.recipe.inert_gas_boost.duration_multiplier", recipe.data.getString("duration_multiplier"))).asWidget())))
             .setIconSupplier(() -> LARGE_PYROLYSER.asStack());
 
     public static void init() {
@@ -38,8 +42,10 @@ public class OillessRecipeTypes {
     public static void initLang(RegistrateLangProvider provider) {
         provider.add("oillessgt.large_pyrolyser", "Large Pyrolyser");
         provider.add("oillessgt.inert_gas_boost", "Inert Gas Boosting");
-        provider.add("oillessgt.recipe.eut_multiplier", "EU/t Multiplier: %sx");
-        provider.add("oillessgt.recipe.duration_multiplier", "Duration Multiplier: %sx");
+        provider.add("oillessgt.recipe.inert_gas_boost.minimum", "Minimum Inert Gas Tier: %d");
+        provider.add("oillessgt.recipe.inert_gas_boost.tier", "Gas Tier: %d");
+        provider.add("oillessgt.recipe.inert_gas_boost.eut_multiplier", "EU/t Multiplier: %sx");
+        provider.add("oillessgt.recipe.inert_gas_boost.duration_multiplier", "Duration Multiplier: %sx");
     }
 
     public static GTRecipeType register(String name, String group, RecipeType<?>... proxyRecipes) {

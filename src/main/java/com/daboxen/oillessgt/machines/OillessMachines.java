@@ -170,6 +170,5 @@ public class OillessMachines {
     public static void initLang(RegistrateLangProvider provider) {
         provider.add("oillessgt.multiblock.large_pyrolyse_oven.fluid_boost", "Currently consuming %d mB/t of %s");
         provider.add("oillessgt.multiblock.large_pyrolyse_oven.low_gas_tier", "Current inert gas tier too low.");
-        provider.add("oillessgt.recipe.inert_gas_boost.minimum", "Minimum Inert Gas Type: %s");
     }
 }
