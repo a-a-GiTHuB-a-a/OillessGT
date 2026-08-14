@@ -68,6 +68,12 @@ public class OillessRecipes {
                 .duration(640).EUt(64)
                 .save(provider);
 
+        LARGE_PYROLYSE_RECIPES.recipeBuilder("log_to_wood_tar_bonus").circuitMeta(10)
+                .inputItems(ItemTags.LOGS_THAT_BURN, 16)
+                .outputFluids(WoodTar.getFluid(3500))
+                .duration(1280).EUt(64)
+                .save(provider);
+
         // Wood Gas
         LARGE_PYROLYSE_RECIPES.recipeBuilder("log_to_wood_gas").circuitMeta(5)
                 .inputItems(ItemTags.LOGS_THAT_BURN, 16)

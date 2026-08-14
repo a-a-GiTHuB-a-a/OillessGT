@@ -119,14 +119,14 @@ public class OillessMachines {
                             .where('#', Predicates.air())
                             .where(' ', Predicates.any())
                             .build())
-                    .pattern("charcoal_liquefier", definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
+                    /*.pattern("charcoal_liquefier", definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
                             .slice(" HHHHH ", "H#####H", "H#####H", "H#####H", "H#####H", "H#####H", " HHHHH ")
                             .where('H', Predicates.blocks(CASING_WATERTIGHT.get()))
                             .where('#', Predicates.air())
                             .where(' ', Predicates.any())
                             .startOffset(OriginOffset.of(0, 17, 0))
                             .anchorOffset(OriginOffset.of(-3, 0, -3))
-                            .build())
+                            .build())*/ //im just doing this in its own recipe lowk
                     .recoveryItems(
                             () -> new ItemLike[] {
                                     GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dust, GTMaterials.Ash).get() })
