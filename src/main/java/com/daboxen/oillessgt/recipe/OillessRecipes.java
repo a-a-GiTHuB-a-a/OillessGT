@@ -4,11 +4,11 @@ import com.daboxen.oillessgt.api.ModifierHelper;
 import com.daboxen.oillessgt.machines.multiblock.LargePyrolyserMachine;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
-import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
 
@@ -22,11 +22,9 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
 public class OillessRecipes {
     public static void addInertGasBoostRecipes(Consumer<FinishedRecipe> provider) {
-        for (Int2ObjectMap.Entry<Pair<FluidIngredient, ModifierFunction>> entry : LargePyrolyserMachine.inertGases.int2ObjectEntrySet()) {
-            int tier = entry.getIntKey();
-            Pair<FluidIngredient, ModifierFunction> pair = entry.getValue();
-            FluidIngredient fluidPerTick = pair.getFirst();
-            ModifierFunction effect = pair.getSecond();
+        for (int tier : LargePyrolyserMachine.getTiers()) {
+            FluidIngredient fluidPerTick = LargePyrolyserMachine.getBoostFluid(tier);
+            ModifierFunction effect = LargePyrolyserMachine.getBoostEffect(tier);
             INERT_GAS_BOOST_RECIPES.recipeBuilder("boost_tier_%d".formatted(tier))
                     .perTick(true)
                     .inputFluids(fluidPerTick)
@@ -196,5 +194,27 @@ public class OillessRecipes {
                 .outputFluids(Butadiene.getFluid(1000))
                 .outputFluids(Water.getFluid(2000))
                 .duration(200).EUt(VA[HV]).save(provider);
+    }
+
+    public static void addMiscReplacementRecipes(Consumer<FinishedRecipe> provider) {
+        CENTRIFUGE_RECIPES.recipeBuilder("soul_sand_separation_oilless").duration(200).EUt(80)
+                .inputItems(Blocks.SOUL_SAND.asItem())
+                .chancedOutput(new ItemStack(Blocks.SAND), 9250)
+                .chancedOutput(dust, Saltpeter, 2250)
+                .chancedOutput(dust, Coal, 225)
+                .outputFluids(CoalTar.getFluid(80))
+                .save(provider);
+
+        CENTRIFUGE_RECIPES.recipeBuilder("oilsands_ore_separation_oilless")
+                .inputItems(ore, Oilsands)
+                .chancedOutput(new ItemStack(Blocks.SAND), 7500)
+                .outputFluids(CoalTar.getFluid(2000))
+                .duration(200).EUt(30).save(provider);
+
+        CENTRIFUGE_RECIPES.recipeBuilder("oilsands_dust_separation_oilless")
+                .inputItems(dust, Oilsands)
+                .chancedOutput(new ItemStack(Blocks.SAND), 7500)
+                .outputFluids(CoalTar.getFluid(2000))
+                .duration(200).EUt(30).save(provider);
     }
 }

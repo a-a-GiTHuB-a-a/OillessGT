@@ -25,7 +25,6 @@ import net.minecraftforge.fluids.FluidStack;
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.value.sync.BooleanSyncValue;
-import brachy.modularui.value.sync.GenericSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
@@ -61,7 +60,10 @@ public class OillessMachines {
                     .appearanceBlock(CASING_HIGH_TEMPERATURE_SMELTING)
                     .partAppearance((controller, part, side) -> {
                         int NEAR_BOUGHS = 10; // number chosen somewhat arbitrarily—should work
-                        if ((part.getBlockPos().getY() - controller.getBlockPos().getY()) > NEAR_BOUGHS) {
+                        int partHeight = part.getBlockPos().getY();
+                        int controllerHeight = controller.getBlockPos().getY();
+                        if ((partHeight - controllerHeight) > NEAR_BOUGHS) {
+                            //OILLESS_LOGGER.info("bough found!!! Position: {}", part.getBlockPos().toString());
                             return CASING_VIBRATION_SAFE.getDefaultState();
                         }
                         return CASING_HIGH_TEMPERATURE_SMELTING.getDefaultState();
@@ -140,24 +142,27 @@ public class OillessMachines {
                                 () -> new BooleanSyncValue(controller::isFormed));
                         IntSyncValue coilTier = syncManager.getOrCreateSyncHandler("coilTier", IntSyncValue.class,
                                 () -> new IntSyncValue(pyrolyserMachine::getCoilTier));
-                        GenericSyncValue<FluidStack> ingredient = syncManager.getOrCreateSyncHandler(
+                        /*GenericSyncValue<FluidStack> ingredient = syncManager.getOrCreateSyncHandler(
                                 "currentFluidBoostType",
                                 GenericSyncValue.class,
                                 () -> GenericSyncValue.builder(FluidStack.class)
                                         .getter(pyrolyserMachine::getCurrentFluidBoostType)
                                         .adapter(GTByteBufAdapters.makeAdapter(FluidStack.CODEC))
-                                        .build());
+                                        .build());*/
+                        IntSyncValue gasTier = syncManager.getOrCreateSyncHandler("currentGasTier", IntSyncValue.class,
+                                () -> new IntSyncValue(pyrolyserMachine::getCurrentGasTier));
+                        FluidStack ingredient = LargePyrolyserMachine.getBoostFluid(gasTier.getIntValue()).getStacks()[0];
 
                         List<IWidget> display = new ArrayList<>();
 
                         display.add(Text.dynamic(() -> Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
                                 coilTier.getIntValue() == 0 ? 75 : 50 * (coilTier.getIntValue() + 1)))
                                 .asWidget().setEnabledIf(w -> isFormed.getBoolValue()));
-                        if (!ingredient.getValue().equals(FluidStack.EMPTY)) {
+                        if (pyrolyserMachine.isActive() && !ingredient.equals(FluidStack.EMPTY)) {
                             display.add(Text
                                     .dynamic(() -> Component.translatable(
                                             "oillessgt.multiblock.large_pyrolyse_oven.fluid_boost",
-                                            ingredient.getValue().getAmount(), ingredient.getValue().getDisplayName()))
+                                            ingredient.getAmount(), ingredient.getDisplayName()))
                                     .asWidget());
                         }
 

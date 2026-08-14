@@ -10,8 +10,6 @@ import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
@@ -20,12 +18,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
-import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.DISABLE_DECOMPOSITION;
-import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.api.registry.GTRegistries.BEDROCK_FLUID_DEFINITIONS;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 
 public class ProgressionPatches {
@@ -48,26 +43,7 @@ public class ProgressionPatches {
         OillessRecipes.addInertGasBoostRecipes(provider);
         OillessRecipes.addLargePyrolyserRecipes(provider);
         OillessRecipes.addButadieneSynthesisRecipes(provider);
-
-        CENTRIFUGE_RECIPES.recipeBuilder("soul_sand_separation_oilless").duration(200).EUt(80)
-                .inputItems(Blocks.SOUL_SAND.asItem())
-                .chancedOutput(new ItemStack(Blocks.SAND), 9250)
-                .chancedOutput(dust, Saltpeter, 2250)
-                .chancedOutput(dust, Coal, 225)
-                .outputFluids(CoalTar.getFluid(80))
-                .save(provider);
-
-        CENTRIFUGE_RECIPES.recipeBuilder("oilsands_ore_separation_oilless")
-                .inputItems(ore, Oilsands)
-                .chancedOutput(new ItemStack(Blocks.SAND), 7500)
-                .outputFluids(CoalTar.getFluid(2000))
-                .duration(200).EUt(30).save(provider);
-
-        CENTRIFUGE_RECIPES.recipeBuilder("oilsands_dust_separation_oilless")
-                .inputItems(dust, Oilsands)
-                .chancedOutput(new ItemStack(Blocks.SAND), 7500)
-                .outputFluids(CoalTar.getFluid(2000))
-                .duration(200).EUt(30).save(provider);
+        OillessRecipes.addMiscReplacementRecipes(provider);
     }
 
     public static void removeRecipes(Consumer<ResourceLocation> provider) {
@@ -152,7 +128,6 @@ public class ProgressionPatches {
     }
 
     public static void initLang(RegistrateLangProvider provider) {
-        replace(provider, "material.gtceu.oilsands", "Tar-Rich Sands");
-        replace(provider, "item.gtceu.oilsands_dust", "Tar-Rich Sands");
+        //replace(provider, "item.gtceu.oilsands_dust", "Tar-Rich Sands");
     }
 }
