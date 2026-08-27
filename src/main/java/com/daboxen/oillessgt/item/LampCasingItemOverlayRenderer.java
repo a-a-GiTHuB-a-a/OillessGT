@@ -1,0 +1,77 @@
+package com.daboxen.oillessgt.item;
+
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemDecorator;
+
+import brachy.modularui.drawable.GuiDraw;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import static com.daboxen.oillessgt.block.LampCasingBlock.isBloomEnabled;
+import static com.daboxen.oillessgt.block.LampCasingBlock.isLightEnabled;
+
+/**
+ * based on {@link com.gregtechceu.gtceu.client.renderer.item.decorator.GTLampItemOverlayRenderer}
+ */
+public class LampCasingItemOverlayRenderer implements IItemDecorator {
+
+    public static final LampCasingItemOverlayRenderer INSTANCE = new LampCasingItemOverlayRenderer();
+
+    private LampCasingItemOverlayRenderer() {}
+
+    public static OverlayType getOverlayType(boolean light, boolean bloom) {
+        if (light) {
+            return bloom ? OverlayType.NONE : OverlayType.NO_BLOOM;
+        } else {
+            return bloom ? OverlayType.NO_LIGHT : OverlayType.NO_BLOOM_NO_LIGHT;
+        }
+    }
+
+    @Override
+    public boolean render(GuiGraphics graphics, Font font, ItemStack stack, int xPosition, int yPosition) {
+        if (!stack.hasTag()) {
+            return false;
+        }
+        @SuppressWarnings("DataFlowIssue")
+        var overlayType = getOverlayType(isLightEnabled(stack.getTag()), isBloomEnabled(stack.getTag()));
+        if (overlayType == OverlayType.NONE) {
+            return false;
+        }
+
+        RenderSystem.disableDepthTest();
+        if (overlayType.noBloom()) {
+            var texture = GTGuiTextures.LAMP_NO_BLOOM;
+            GuiDraw.drawTexture(graphics.pose().last().pose(), texture.location, xPosition, yPosition, xPosition + 16,
+                    yPosition + 16, texture.u0, texture.v0,
+                    texture.u1, texture.v1);
+        }
+
+        if (overlayType.noLight()) {
+            var texture = GTGuiTextures.LAMP_NO_LIGHT;
+            GuiDraw.drawTexture(graphics.pose().last().pose(), texture.location, xPosition, yPosition, xPosition + 16,
+                    yPosition + 16, texture.u0, texture.v0,
+                    texture.u1, texture.v1);
+        }
+        RenderSystem.enableDepthTest();
+        return true;
+    }
+
+    public enum OverlayType {
+
+        NONE,
+        NO_BLOOM,
+        NO_LIGHT,
+        NO_BLOOM_NO_LIGHT;
+
+        public boolean noLight() {
+            return this == NO_LIGHT || this == NO_BLOOM_NO_LIGHT;
+        }
+
+        public boolean noBloom() {
+            return this == NO_BLOOM || this == NO_BLOOM_NO_LIGHT;
+        }
+    }
+}

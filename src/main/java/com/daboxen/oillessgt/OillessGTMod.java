@@ -1,33 +1,40 @@
 package com.daboxen.oillessgt;
 
 import com.daboxen.oillessgt.additions.ProgressionPatches;
+import com.daboxen.oillessgt.block.OillessBlocks;
 import com.daboxen.oillessgt.config.OillessConfiguration;
 import com.daboxen.oillessgt.data.OillessDatagen;
+import com.daboxen.oillessgt.item.LampCasingBlockItem;
+import com.daboxen.oillessgt.item.LampCasingItemOverlayRenderer;
 import com.daboxen.oillessgt.machines.OillessMachines;
-
+import com.daboxen.oillessgt.recipe.OillessRecipeConditions;
 import com.daboxen.oillessgt.recipe.OillessRecipeTypes;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static com.gregtechceu.gtceu.api.registry.GTRegistries.RECIPE_TYPES;
 
 @Mod(OillessGTMod.MOD_ID)
 @SuppressWarnings("removal")
@@ -46,6 +53,7 @@ public class OillessGTMod {
         modEventBus.addListener(this::clientSetup);
 
         OillessConfiguration.init();
+        OillessBlocks.init();
 
         modEventBus.addListener(this::addMaterials);
         modEventBus.addListener(this::modifyMaterials);
@@ -53,6 +61,7 @@ public class OillessGTMod {
         modEventBus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         modEventBus.addGenericListener(MachineDefinition.class, this::registerMachines);
         modEventBus.addGenericListener(SoundEntry.class, this::registerSounds);
+        modEventBus.addGenericListener(RecipeConditionType.class, this::registerRecipeConditions);
 
         // Most other events are fired on Forge's bus.
         // If we want to use annotations to register event listeners,
@@ -69,6 +78,15 @@ public class OillessGTMod {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         OILLESS_LOGGER.info("Hey, we're on Minecraft version {}!", Minecraft.getInstance().getLaunchedVersion());
+    }
+
+    @SubscribeEvent
+    public void onRegisterItemDecorations(RegisterItemDecorationsEvent event) {
+        for (Item item : ForgeRegistries.ITEMS) {
+            if (item instanceof LampCasingBlockItem) {
+                event.register(item, LampCasingItemOverlayRenderer.INSTANCE);
+            }
+        }
     }
 
     /**
@@ -108,6 +126,10 @@ public class OillessGTMod {
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         OillessRecipeTypes.init();
+    }
+
+    private void registerRecipeConditions(GTCEuAPI.RegisterEvent<ResourceLocation, RecipeConditionType<?>> event) {
+        OillessRecipeConditions.init();
     }
 
     /**

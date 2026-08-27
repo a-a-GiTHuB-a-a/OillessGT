@@ -1,6 +1,7 @@
 package com.daboxen.oillessgt.machines;
 
 import com.daboxen.oillessgt.config.OillessConfiguration;
+import com.daboxen.oillessgt.machines.multiblock.GreenhouseMachine;
 import com.daboxen.oillessgt.machines.multiblock.LargePyrolyserMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -12,10 +13,11 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.common.data.GTMaterialBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import com.gregtechceu.gtceu.common.mui.GTByteBufAdapters;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +29,7 @@ import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.value.sync.BooleanSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,17 +37,23 @@ import java.util.List;
 
 import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
 import static com.daboxen.oillessgt.OillessGTMod.OILLESS_REGISTRATE;
-import static com.daboxen.oillessgt.recipe.OillessRecipeTypes.*;
+import static com.daboxen.oillessgt.block.OillessBlocks.GROWTH_LIGHT;
+import static com.daboxen.oillessgt.block.OillessBlocks.REINFORCED_DIRT;
+import static com.daboxen.oillessgt.recipe.OillessRecipeTypes.GREENHOUSE_RECIPES;
+import static com.daboxen.oillessgt.recipe.OillessRecipeTypes.LARGE_PYROLYSE_RECIPES;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_VIBRATION_SAFE;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.*;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
 public class OillessMachines {
 
-    public static MultiblockMachineDefinition LARGE_PYROLYSER;
+    public static @Nullable MultiblockMachineDefinition LARGE_PYROLYSER;
+    public static @Nullable MultiblockMachineDefinition GREENHOUSE;
 
     public static void init(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         OILLESS_LOGGER.info("Registering machines…");
@@ -63,7 +72,7 @@ public class OillessMachines {
                         int partHeight = part.getBlockPos().getY();
                         int controllerHeight = controller.getBlockPos().getY();
                         if ((partHeight - controllerHeight) > NEAR_BOUGHS) {
-                            //OILLESS_LOGGER.info("bough found!!! Position: {}", part.getBlockPos().toString());
+                            // OILLESS_LOGGER.info("bough found!!! Position: {}", part.getBlockPos().toString());
                             return CASING_VIBRATION_SAFE.getDefaultState();
                         }
                         return CASING_HIGH_TEMPERATURE_SMELTING.getDefaultState();
@@ -119,14 +128,16 @@ public class OillessMachines {
                             .where('#', Predicates.air())
                             .where(' ', Predicates.any())
                             .build())
-                    /*.pattern("charcoal_liquefier", definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
-                            .slice(" HHHHH ", "H#####H", "H#####H", "H#####H", "H#####H", "H#####H", " HHHHH ")
-                            .where('H', Predicates.blocks(CASING_WATERTIGHT.get()))
-                            .where('#', Predicates.air())
-                            .where(' ', Predicates.any())
-                            .startOffset(OriginOffset.of(0, 17, 0))
-                            .anchorOffset(OriginOffset.of(-3, 0, -3))
-                            .build())*/ //im just doing this in its own recipe lowk
+                    /*
+                     * .pattern("charcoal_liquefier", definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
+                     * .slice(" HHHHH ", "H#####H", "H#####H", "H#####H", "H#####H", "H#####H", " HHHHH ")
+                     * .where('H', Predicates.blocks(CASING_WATERTIGHT.get()))
+                     * .where('#', Predicates.air())
+                     * .where(' ', Predicates.any())
+                     * .startOffset(OriginOffset.of(0, 17, 0))
+                     * .anchorOffset(OriginOffset.of(-3, 0, -3))
+                     * .build())
+                     */ // im just doing this in its own recipe lowk
                     .recoveryItems(
                             () -> new ItemLike[] {
                                     GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dust, GTMaterials.Ash).get() })
@@ -142,16 +153,19 @@ public class OillessMachines {
                                 () -> new BooleanSyncValue(controller::isFormed));
                         IntSyncValue coilTier = syncManager.getOrCreateSyncHandler("coilTier", IntSyncValue.class,
                                 () -> new IntSyncValue(pyrolyserMachine::getCoilTier));
-                        /*GenericSyncValue<FluidStack> ingredient = syncManager.getOrCreateSyncHandler(
-                                "currentFluidBoostType",
-                                GenericSyncValue.class,
-                                () -> GenericSyncValue.builder(FluidStack.class)
-                                        .getter(pyrolyserMachine::getCurrentFluidBoostType)
-                                        .adapter(GTByteBufAdapters.makeAdapter(FluidStack.CODEC))
-                                        .build());*/
+                        /*
+                         * GenericSyncValue<FluidStack> ingredient = syncManager.getOrCreateSyncHandler(
+                         * "currentFluidBoostType",
+                         * GenericSyncValue.class,
+                         * () -> GenericSyncValue.builder(FluidStack.class)
+                         * .getter(pyrolyserMachine::getCurrentFluidBoostType)
+                         * .adapter(GTByteBufAdapters.makeAdapter(FluidStack.CODEC))
+                         * .build());
+                         */
                         IntSyncValue gasTier = syncManager.getOrCreateSyncHandler("currentGasTier", IntSyncValue.class,
                                 () -> new IntSyncValue(pyrolyserMachine::getCurrentGasTier));
-                        FluidStack ingredient = LargePyrolyserMachine.getBoostFluid(gasTier.getIntValue()).getStacks()[0];
+                        FluidStack ingredient = LargePyrolyserMachine.getBoostFluid(gasTier.getIntValue())
+                                .getStacks()[0];
 
                         List<IWidget> display = new ArrayList<>();
 
@@ -170,10 +184,87 @@ public class OillessMachines {
                     })
                     .register();
         }
+
+        if (OillessConfiguration.INSTANCE.addGreenhouse) {
+            GREENHOUSE = OILLESS_REGISTRATE
+                    .multiblock("greenhouse", GreenhouseMachine::new)
+                    .langValue("Plant Growth Chamber")
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .recipeType(GREENHOUSE_RECIPES)
+                    .recipeModifiers(
+                            ELECTRIC_OVERCLOCK.apply(
+                                    OverclockingLogic.create(1 / 3.0, OverclockingLogic.STD_VOLTAGE_FACTOR, true)),
+                            BATCH_MODE)
+                    .appearanceBlock(CASING_STEEL_SOLID)
+                    // TODO: somehow gate certain recipes behind internal substructure. (I HATE SUBSTRUCTURES)
+                    .pattern(definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
+                            // spotless:off
+                            .slice("CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC", "CCCCCCCCC")
+                            .slice("CCCCCCCCC", "C       C", "C       C", "C       C", "C       C", "C       C", "C       C", "C       C", "CCCCSCCCC")
+                            .slice("CGGGGGGGC", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "CGGGGGGGC")
+                            .slice("CGGGGGGGC", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "CGGGGGGGC")
+                            .slice("CGGGGGGGC", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "CGGGGGGGC")
+                            .slice("CGGGGGGGC", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "CGGGGGGGC")
+                            .slice("CGGGGGGGC", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "CGGGGGGGC")
+                            .slice("CGGGGGGGC", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "G       G", "CGGGGGGGC")
+                            .slice("CCCCCCCCC", "CGGGGGGGC", "CGGGGGGGC", "CGGCCCGGC", "CGGCCCGGC", "CGGCCCGGC", "CGGGGGGGC", "CGGGGGGGC", "CCCCCCCCC")
+                            // spotless:on
+                            .where('S', Predicates.controller(definition))
+                            .where('C', Predicates.blocks(CASING_STEEL_SOLID.get())
+                                    .or(Predicates.autoAbilities(GREENHOUSE_RECIPES)))
+                            .where('G', Predicates.blocks(CASING_TEMPERED_GLASS.get()))
+                            .where('#', Predicates.air())
+                            .where(' ', Predicates.any())
+                            .build())
+                    .pattern("arboretum", definition -> MultiblockPatternBuilder.start(UP, FRONT, RIGHT)
+                            // spotless:off
+                            .slice("DDPXPDD", "DDDDDDD", "PDDDDDP", "XDDDDDX", "PDDDDDP", "DDDDDDD", "DDPXPDD")
+                            .slice("##PXP##", "#######", "P#####P", "X##T##X", "P#####P", "#######", "##PXP##")
+                            .slice("##PXP##", "#######", "P#####P", "X##T##X", "P#####P", "#######", "##PXP##")
+                            .slice("##PXP##", "#######", "P##T##P", "X#TTT#X", "P##T##P", "#######", "##PXP##")
+                            .slice("##PXP##", "#######", "P#####P", "X##T##X", "P#####P", "#######", "##PXP##")
+                            .slice("##PXP##", "#######", "P#####P", "X#####X", "P#####P", "#######", "##PXP##")
+                            .slice("##PXP##", "#######", "P#MMM#P", "X#MMM#X", "P#MMM#P", "#######", "##PXP##")
+                            // spotless:on
+                            .where('P', Predicates.blocks(CASING_STEEL_PIPE.get()))
+                            .where('X',
+                                    Predicates.blocks(GTMaterialBlocks.MATERIAL_BLOCKS
+                                            .get(TagPrefix.frameGt, GTMaterials.BlackSteel).get()))
+                            .where('D', Predicates.blocks(REINFORCED_DIRT.get()))
+                            .where('T',
+                                    Predicates.blocks(GTMaterialBlocks.MATERIAL_BLOCKS
+                                            .get(TagPrefix.frameGt, GTMaterials.TreatedWood).get()))
+                            .where('M', Predicates.blocks(GROWTH_LIGHT.get()))
+                            .where('#', Predicates.air())
+                            .where(' ', Predicates.any())
+                            .anchorOffset(OriginOffset.of(RIGHT, 3).move(FRONT, 3))
+                            .startOffset(OriginOffset.of(BACK, 4))
+                            .build())
+                    .allowFlip(false)
+                    .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                            GTCEu.id("block/multiblock/implosion_compressor"))
+                    .tooltips(Component.translatable("oillessgt.multiblock.greenhouse.tooltip.1"),
+                            Component.translatable("oillessgt.multiblock.greenhouse.tooltip.2"))
+                    .additionalDisplay((controller, syncManager) -> {
+                        if (!(controller instanceof GreenhouseMachine greenhouse)) {
+                            return List.of();
+                        }
+                        return List.of(
+                                Text.dynamic(
+                                        () -> Component.translatable("oillessgt.multiblock.greenhouse.substructure",
+                                                greenhouse.getInternalStructureName()))
+                                        .asWidget());
+                    })
+                    .register();
+        }
     }
 
     public static void initLang(RegistrateLangProvider provider) {
         provider.add("oillessgt.multiblock.large_pyrolyse_oven.fluid_boost", "Currently consuming %d mB/t of %s");
         provider.add("oillessgt.multiblock.large_pyrolyse_oven.low_gas_tier", "Current inert gas tier too low.");
+        provider.add("oillessgt.multiblock.greenhouse.tooltip.1", "Now with extra efficiency!");
+        provider.add("oillessgt.multiblock.greenhouse.tooltip.2",
+                "Has 3/4 overclocks and subticking; for every overclock, it gains a 3x speed boost instead of a 4x speed boost.");
+        provider.add("oillessgt.multiblock.greenhouse.substructure", "Currently has internal structure '%s'");
     }
 }

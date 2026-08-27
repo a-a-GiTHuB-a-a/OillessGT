@@ -36,4 +36,9 @@ public class OillessConfiguration {
     @Configurable.Comment({ "Whether to register the TREE.", "Default: true" })
     @Configurable.UpdateRestriction(UpdateRestrictions.MAIN_MENU)
     public boolean addLargePyrolyser = true;
+
+    @Configurable
+    @Configurable.Comment({ "Whether to register the Greenhouse.", "Default: true" })
+    @Configurable.UpdateRestriction(UpdateRestrictions.MAIN_MENU)
+    public boolean addGreenhouse = true;
 }

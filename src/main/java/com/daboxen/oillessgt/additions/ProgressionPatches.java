@@ -2,8 +2,9 @@ package com.daboxen.oillessgt.additions;
 
 import com.daboxen.oillessgt.OillessGTMod;
 import com.daboxen.oillessgt.api.RecipeBuilderHelper;
-
+import com.daboxen.oillessgt.config.OillessConfiguration;
 import com.daboxen.oillessgt.recipe.OillessRecipes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
@@ -21,7 +22,6 @@ import static com.daboxen.oillessgt.OillessGTMod.OILLESS_LOGGER;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.DISABLE_DECOMPOSITION;
 import static com.gregtechceu.gtceu.api.registry.GTRegistries.BEDROCK_FLUID_DEFINITIONS;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
-import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 
 public class ProgressionPatches {
 
@@ -40,8 +40,13 @@ public class ProgressionPatches {
     public static void addRecipes(Consumer<FinishedRecipe> provider) {
         OILLESS_LOGGER.info("Adding custom recipes");
 
-        OillessRecipes.addInertGasBoostRecipes(provider);
-        OillessRecipes.addLargePyrolyserRecipes(provider);
+        if (OillessConfiguration.INSTANCE.addLargePyrolyser) {
+            OillessRecipes.addInertGasBoostRecipes(provider);
+            OillessRecipes.addLargePyrolyserRecipes(provider);
+        }
+        if (OillessConfiguration.INSTANCE.addGreenhouse) {
+            OillessRecipes.addGreenhouseRecipes(provider);
+        }
         OillessRecipes.addButadieneSynthesisRecipes(provider);
         OillessRecipes.addMiscReplacementRecipes(provider);
     }
@@ -128,6 +133,6 @@ public class ProgressionPatches {
     }
 
     public static void initLang(RegistrateLangProvider provider) {
-        //replace(provider, "item.gtceu.oilsands_dust", "Tar-Rich Sands");
+        // replace(provider, "item.gtceu.oilsands_dust", "Tar-Rich Sands");
     }
 }
