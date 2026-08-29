@@ -91,6 +91,7 @@ public class ProgressionPatches {
 
         // things that are basically oil
         OIL_FLUIDS.add("gtceu:natural_gas");
+        OIL_FLUIDS.add("gtceu:lpg");
 
         // direct oil products
         OIL_FLUIDS.add("gtceu:sulfuric_light_fuel");
