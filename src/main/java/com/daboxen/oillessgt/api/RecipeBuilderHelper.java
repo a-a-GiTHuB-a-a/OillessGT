@@ -25,7 +25,7 @@ public class RecipeBuilderHelper {
     public static FluidStack stringToFluidStack(String id) {
         var nbt = new CompoundTag();
         nbt.putString("FluidName", id);
-        nbt.putInt("Amount", 1000);
+        nbt.putInt("Amount", 1);
         return FluidStack.loadFluidStackFromNBT(nbt);
     }
 }
