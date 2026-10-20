@@ -34,23 +34,23 @@ public class LargePyrolyserMachine extends CoilWorkableElectricMultiblockMachine
     static {
         boostFluids.put(5, BlastProperty.GasTier.HIGHEST.getFluid(5)); // 50 mB/t
         boostEffects.put(5, ModifierFunction.builder()
-                .durationMultiplier(.2)
-                .eutMultiplier(.5)
+                .durationMultiplier(.02)
+                .eutMultiplier(10)
                 .build());
         boostFluids.put(4, BlastProperty.GasTier.HIGHER.getFluid(4)); // 100 mB/t
         boostEffects.put(4, ModifierFunction.builder()
-                .durationMultiplier(.3)
-                .eutMultiplier(.8)
+                .durationMultiplier(.1)
+                .eutMultiplier(4)
                 .build());
         boostFluids.put(3, BlastProperty.GasTier.HIGH.getFluid(4)); // 200 mB/t
         boostEffects.put(3, ModifierFunction.builder()
-                .durationMultiplier(.4)
-                .eutMultiplier(1)
+                .durationMultiplier(.15)
+                .eutMultiplier(3)
                 .build());
         boostFluids.put(2, BlastProperty.GasTier.MID.getFluid(5)); // 500 mB/t
         boostEffects.put(2, ModifierFunction.builder()
-                .durationMultiplier(.4)
-                .eutMultiplier(1.2)
+                .durationMultiplier(.3)
+                .eutMultiplier(2)
                 .build());
         boostFluids.put(1, BlastProperty.GasTier.LOW.getFluid(1)); // 1000 mB/t
         boostEffects.put(1, ModifierFunction.builder()
