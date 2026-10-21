@@ -29,7 +29,7 @@ public class OillessJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
-        if (GTCEu.Mods.isREILoaded() || GTCEu.Mods.isEMILoaded()) return;
+        if (GTCEu.Mods.isEMILoaded()) return;
         registration.addRecipeCatalyst(LARGE_PYROLYSER.asStack(),
                 new RecipeType<>(INERT_GAS_BOOST_RECIPES.getCategory().registryKey, GTRecipe.class));
     }
