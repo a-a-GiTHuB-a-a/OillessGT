@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -58,10 +59,22 @@ public class ProgressionPatches {
     }
 
     public static boolean shouldRemoveRecipe(GTRecipeBuilder recipe) {
+        boolean pesterThis = false;
+        if (recipe.id.toString().contains("gtceu_oil_heavy")) { //testing BS
+            OILLESS_LOGGER.info("yo we got an um…uh…heavy oil recipe?");
+            OILLESS_LOGGER.info("{}", recipe.id);
+            pesterThis = true;
+        }
         for (var oilFluid : OIL_FLUIDS) {
             var stack = RecipeBuilderHelper.stringToFluidStack(oilFluid);
             // check inputs
             for (var fluidIngredient : RecipeBuilderHelper.getInputFluids(recipe)) {
+                if (pesterThis) { //more testing BS
+                    OILLESS_LOGGER.info(fluidIngredient);
+                    //OILLESS_LOGGER.info(fluidIngredient.getStacks());
+                    OILLESS_LOGGER.info(Arrays.stream(fluidIngredient.getStacks()).map(s->s.getDisplayName().getString()).toList());
+                    OILLESS_LOGGER.info(fluidIngredient.test(OilHeavy.getFluid(1)));
+                }
                 if (fluidIngredient.test(stack)) return true;
             }
             // check outputs
