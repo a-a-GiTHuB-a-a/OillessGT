@@ -29,9 +29,9 @@ public class GreenhouseMachine extends WorkableElectricMultiblockMachine {
         }
         if (arboretum.hasErrors()) {
             var error = patternStates.get("arboretum").getErrors().get(0);
-            String errorName = "position %s".formatted(error.getPos());
+            String errorName = "position %s".formatted(error.pos());
             if (error instanceof BlockMatchingError blockError) {
-                errorName = "blocks %s at position %s".formatted(blockError.getBlocks(), blockError.getPos());
+                errorName = "blocks %s at position %s".formatted(blockError.getBlocks(), blockError.pos());
             }
             OILLESS_LOGGER.info("Error: {}", errorName);
         }
